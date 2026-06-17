@@ -1,0 +1,24 @@
+---
+
+site: WordWilde
+all_tenant:
+  - netbox.netbox.netbox_tenant:
+    netbox_url: "{{ netbox_url }}"
+    netbox_token: "{{ netbox_token }}"
+    data:
+      name: My Tenant
+      slug: my-tenant
+      description: Description of the tenant
+    state: present
+
+all_vm:
+  - netbox.netbox.netbox_virtual_machine:
+    netbox_url: "{{ netbox_url }}"
+    netbox_token: "{{ netbox_token }}"
+    data:
+      name: Test Virtual Machine
+      site: "{{ site }}"
+    state: present
+
+netbox_url: http://localhost:8000
+netbox_token: nbt_BOUKpSzmKnFJ.vlDgaHf7lmGdxHxO2Fny8srSdFk95QN4VOCAXxCD
