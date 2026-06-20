@@ -4,17 +4,23 @@
   args:
     executable: "{{ python3_interpreter }}"
   register: result
-  tags: netbox
+  tags:
+    - netbox
+    - tenant
 
 - name: Parse result
   set_fact:
     tenant_info: "{{ result.stdout.split('\n')[0] | from_json }}"
-  tags: netbox
+  tags:
+    - netbox
+    - tenant
 
 - name: print
   debug:
     msg: "{{ tenant_info }}"
-  tags: netbox
+  tags: 
+    - netbox
+    - tenant
 
 - name: Create a tenant in NetBox
   netbox.netbox.netbox_tenant:
@@ -26,7 +32,9 @@
       description: "{{ item.data.description }}"
     state: "{{ item.state }}"
   loop: "{{ tenants }}"
-  tags: netbox
+  tags:
+    - netbox
+    - tenant
   when: "item.data.name is not in tenant_info"
 
 - name: Create virtual machine within NetBox with only required information
@@ -38,4 +46,6 @@
       site: "{{ item.data.site }}"
     state: present
   loop: "{{ all_vm }}"
-  tags: netbox
+  tags:
+    - netbox
+    - tenant
