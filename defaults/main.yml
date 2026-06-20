@@ -1,7 +1,26 @@
 ---
 
 site: WordWilde
-all_tenant:
+
+python3_interpreter: /mnt/home_encrypted/wbruce/dev/python/package_virtual/.envv/bin/python3
+
+tenants:
+  - netbox.netbox.netbox_tenant:
+    netbox_url: "{{ netbox_url }}"
+    netbox_token: "{{ netbox_token }}"
+    data:
+      name: Retard_tenant
+      slug: my-tenant2
+      description: Description of the tenant
+    state: present
+  - netbox.netbox.netbox_tenant:
+    netbox_url: "{{ netbox_url }}"
+    netbox_token: "{{ netbox_token }}"
+    data:
+      name: Salut
+      slug: my-tenant
+      description: Description of the tenant
+    state: present
   - netbox.netbox.netbox_tenant:
     netbox_url: "{{ netbox_url }}"
     netbox_token: "{{ netbox_token }}"

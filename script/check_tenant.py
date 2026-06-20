@@ -1,10 +1,10 @@
 import sys, json, pynetbox
 
 all_tenants: list = ["StudyP", "My Tenant", "salut"]
-url, token, name = sys.argv[1], sys.argv[2], sys.argv[3]
+
+url, token = sys.argv[1], sys.argv[2]
 nb: pynetbox.api = pynetbox.api(url, token)
 
-for x in all_tenants:
-    tenant = nb.tenancy.tenants.get(name=x)
-    print(json.dumps({"exists": tenant is not None}))
-    print(tenant)
+tenants = nb.tenancy.tenants.all()
+tenant_names = [t.name for t in tenants]
+print(json.dumps(tenant_names))

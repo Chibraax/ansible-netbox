@@ -1,15 +1,19 @@
 ---
-- name: Check if tenant exists via API
-  uri:
-    url: "{{ netbox_url }}/api/tenancy/tenants/?name={{"
-    headers:
-      Authorization: "Token {{ netbox_token }}"
-  register: tenant_check
+- name: Run external Python script
+  script: script/check_tenant.py {{ netbox_url }} {{ netbox_token }}
+  args:
+    executable: "{{ python3_interpreter }}"
+  register: result
+  tags: netbox
+
+- name: Parse result
+  set_fact:
+    tenant_info: "{{ result.stdout.split('\n')[0] | from_json }}"
   tags: netbox
 
 - name: print
   debug:
-    msg: "{{ tenant_check }}"
+    msg: "{{ tenant_info }}"
   tags: netbox
 
 - name: Create a tenant in NetBox
@@ -21,17 +25,18 @@
       slug: "{{ item.data.slug }}"
       description: "{{ item.data.description }}"
     state: "{{ item.state }}"
-  loop: "{{ all_tenant }}"
+  loop: "{{ tenants }}"
   tags: netbox
-  when: tenant_check.json.count == 0
+  when: "item.data.name is not in tenant_info"
 
-- name: Create virtual machine within NetBox with only required information
-  netbox.netbox.netbox_virtual_machine:
-    netbox_url: "{{ item.netbox_url }}"
-    netbox_token: "{{ item.netbox_token }}"
-    data:
-      name: "{{ item.data.name }}"
-      site: "{{ item.data.site }}"
-    state: present
-  loop: "{{ all_vm }}"
-  tags: netbox
+#
+# - name: Create virtual machine within NetBox with only required information
+#   netbox.netbox.netbox_virtual_machine:
+#     netbox_url: "{{ item.netbox_url }}"
+#     netbox_token: "{{ item.netbox_token }}"
+#     data:
+#       name: "{{ item.data.name }}"
+#       site: "{{ item.data.site }}"
+#     state: present
+#   loop: "{{ all_vm }}"
+#   tags: netbox
