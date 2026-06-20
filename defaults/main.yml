@@ -35,8 +35,9 @@ all_vm:
     netbox_url: "{{ netbox_url }}"
     netbox_token: "{{ netbox_token }}"
     data:
-      name: Test Virtual Machine
+      name: Test Virtual Machine 2
       site: "{{ site }}"
+      tenant: my-tenant2
     state: present
 
 netbox_url: http://localhost:8000
