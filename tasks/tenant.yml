@@ -35,7 +35,7 @@
   tags:
     - netbox
     - tenant
-  when: "item.data.name is not in tenant_info"
+  when: "item.data.name is not in tenant_info" # Create only if tenant doesnt exist
 
 - name: Create virtual machine within NetBox with only required information
   netbox.netbox.netbox_virtual_machine:
