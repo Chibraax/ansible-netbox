@@ -1,4 +1,6 @@
-import sys, json, pynetbox
+import sys
+import json
+import pynetbox
 
 
 url, token = sys.argv[1], sys.argv[2]
